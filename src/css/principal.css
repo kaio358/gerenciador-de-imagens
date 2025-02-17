@@ -1,0 +1,40 @@
+/* Container que limita a área de exibição das imagens */
+#caixa_imagens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    max-width: 90vw; /* 90% da largura da tela */
+    max-height: 80vh; /* 80% da altura da tela */
+    overflow-y: auto; /* Permite rolagem caso ultrapasse a altura */
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Padroniza o tamanho das imagens */
+.miniatura {
+    width: 300px;
+    height: 300px;
+    object-fit: cover; 
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+#loading{
+    display:none;
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background: rgba(0, 0, 0, 0.8); 
+    color: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    font-size: 18px;
+}

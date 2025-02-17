@@ -1,14 +1,27 @@
+const tf = require('@tensorflow/tfjs');
+const mobilenet = require('@tensorflow-models/mobilenet');
+const blazeface = require('@tensorflow-models/blazeface');
 
+const inputFile = document.getElementById('fileInput');
+const caixaDeImagens = document.getElementById('caixa_imagens');
+const loadingScreen = document.getElementById('loading');
 
-const inputFile = document.getElementById('fileInput'); // Input de arquivo
-const caixaDeImagens = document.getElementById('caixa_imagens'); // Contêiner para exibir a imagem
+let mobilenetModel;
+let blazefaceModel;
+const MAX_IMAGENS = 25;
 
-let mobilenetModel; // Variável para armazenar o modelo MobileNet
-let blazefaceModel; // Variável para armazenar o modelo BlazeFace
+function showLoading(message = "Carregando modelos...") {
+    loadingScreen.style.display = "block";
+    loadingScreen.innerText = message;
+}
 
-// Função para carregar os modelos
+function hideLoading() {
+    loadingScreen.style.display = "none";
+}
+
+// Carregar modelos
 async function carregarModelos() {
-    console.log('Carregando modelos...');
+    showLoading("Carregando modelos de IA...");
     try {
         mobilenetModel = await mobilenet.load();
         blazefaceModel = await blazeface.load();
@@ -16,56 +29,84 @@ async function carregarModelos() {
     } catch (error) {
         console.error('Erro ao carregar modelos:', error);
         alert('Erro ao carregar modelos. Verifique o console para mais detalhes.');
+    } finally {
+        hideLoading();
     }
 }
 
-// Carregar os modelos quando a página for carregada
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarModelos();
 });
 
-// Evento para quando o usuário selecionar uma imagem
-inputFile.addEventListener('change', (e) => {
-    const file = e.target.files[0]; // Arquivo selecionado
-    if (file) {
-        const reader = new FileReader(); // Leitor de arquivos
-        reader.onload = function(event) {
-            const imagePath = event.target.result; // Caminho da imagem
-            processarImagem(imagePath); // Chamar função para processar a imagem
+// Processar múltiplas imagens
+inputFile.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files).slice(0, MAX_IMAGENS);
+    
+    if (files.length === 0) return;
+
+    caixaDeImagens.innerHTML = ''; // Limpar imagens anteriores
+    showLoading("Processando imagens...");
+
+    const promessas = files.map(file => new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            const imagePath = event.target.result;
+            const resultado = await processarImagem(imagePath);
+            resolve(resultado);
         };
-        reader.readAsDataURL(file); // Ler o arquivo como URL de dados
-    }
+        reader.readAsDataURL(file);
+    }));
+
+    const resultados = await Promise.all(promessas);
+    
+    hideLoading();
+
+    // Mostrar um resumo dos resultados no alert
+    const resumo = resultados
+        .filter(res => res !== null)
+        .map((res, index) => 
+            `Imagem ${index + 1}:\nRostos detectados: ${res.faces}\nClassificação:\n${res.classes}`
+        ).join("\n\n");
+
+    alert(`Resultados:\n\n${resumo}`);
 });
 
-// Função para processar a imagem
+// Processar cada imagem individualmente
 async function processarImagem(imagePath) {
-    const img = document.createElement('img'); // Criar elemento de imagem
-    img.src = imagePath; // Definir o caminho da imagem
-    caixaDeImagens.innerHTML = ''; // Limpar o contêiner de imagens
-    caixaDeImagens.appendChild(img); // Adicionar a imagem ao contêiner
+    return new Promise(resolve => {
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.classList.add('miniatura');
+    
 
-    // Quando a imagem for carregada, processá-la
-    img.onload = async () => {
-        if (!blazefaceModel || !mobilenetModel) {
-            console.log('Modelos ainda não carregados!');
-            alert('Modelos ainda não carregados. Tente novamente.');
-            return;
-        }
+        caixaDeImagens.appendChild(img);
 
-        try {
-            // Detectar rostos na imagem
-            const facePredictions = await blazefaceModel.estimateFaces(img, false);
-            console.log(`Rostos detectados: ${facePredictions.length}`);
+        img.onload = async () => {
+            if (!blazefaceModel || !mobilenetModel) {
+                console.log('Modelos ainda não carregados!');
+                alert('Modelos ainda não carregados. Tente novamente.');
+                hideLoading();
+                return resolve(null);
+            }
 
-            // Classificar a imagem usando MobileNet
-            const mobilenetPredictions = await mobilenetModel.classify(img);
-            console.log('Classificação da imagem:', mobilenetPredictions);
+            try {
+                const facePredictions = await blazefaceModel.estimateFaces(img, false);
+                const mobilenetPredictions = await mobilenetModel.classify(img);
 
-            // Exibir os resultados
-            alert(`Rostos detectados: ${facePredictions.length}\n\nClassificação: ${mobilenetPredictions.map(p => `${p.className} (${(p.probability * 100).toFixed(2)}%)`).join('\n')}`);
-        } catch (error) {
-            console.error('Erro ao processar a imagem:', error);
-            alert('Ocorreu um erro ao processar a imagem. Verifique o console para mais detalhes.');
-        }
-    };
+                const classificacoes = mobilenetPredictions
+                    .map(p => `${p.className} (${(p.probability * 100).toFixed(2)}%)`)
+                    .join('\n');
+
+                resolve({ 
+                    faces: facePredictions.length, 
+                    classes: classificacoes 
+                });
+
+            } catch (error) {
+                console.error('Erro ao processar a imagem:', error);
+                alert('Erro ao processar uma das imagens.');
+                resolve(null);
+            }
+        };
+    });
 }
