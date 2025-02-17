@@ -1,0 +1,21 @@
+{
+  "name": "classificador_imagens",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow-models/blazeface": "^0.1.0",
+    "@tensorflow-models/mobilenet": "^2.1.1",
+    "@tensorflow/tfjs": "^4.22.0",
+    "face-api.js": "^0.22.2"
+  },
+  "devDependencies": {
+    "electron": "^34.1.1"
+  }
+}

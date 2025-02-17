@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Imagens</title>
+</head>
+<body>
+    <h1>Organizador de Imagens</h1>
+    <input type="file" id="fileInput" />
+
+    <div id="loading" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.8); color: white; padding: 20px; border-radius: 10px; font-size: 18px;">
+        Carregando...
+    </div>
+    
+   <div id="caixa_imagens"></div>
+   
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+    <script src="./src/js/renderer.js"></script>
+</body>
+</html>
