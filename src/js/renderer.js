@@ -10,6 +10,9 @@ let mobilenetModel;
 let blazefaceModel;
 const MAX_IMAGENS = 25;
 
+// Palavras-chave relacionadas a pessoas para categorização
+const CATEGORIAS_HUMANAS = ["man", "woman", "person", "boy", "girl", "human", "people"];
+
 function showLoading(message = "Carregando modelos...") {
     loadingScreen.style.display = "block";
     loadingScreen.innerText = message;
@@ -19,7 +22,6 @@ function hideLoading() {
     loadingScreen.style.display = "none";
 }
 
-// Carregar modelos
 async function carregarModelos() {
     showLoading("Carregando modelos de IA...");
     try {
@@ -38,15 +40,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     await carregarModelos();
 });
 
-// Processar múltiplas imagens
+// Processamento de múltiplas imagens
 inputFile.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files).slice(0, MAX_IMAGENS);
     
     if (files.length === 0) return;
 
-    caixaDeImagens.innerHTML = ''; // Limpar imagens anteriores
     showLoading("Processando imagens...");
-
+    
     const promessas = files.map(file => new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = async (event) => {
@@ -58,10 +59,8 @@ inputFile.addEventListener('change', async (e) => {
     }));
 
     const resultados = await Promise.all(promessas);
-    
     hideLoading();
 
-    // Mostrar um resumo dos resultados no alert
     const resumo = resultados
         .filter(res => res !== null)
         .map((res, index) => 
@@ -71,21 +70,36 @@ inputFile.addEventListener('change', async (e) => {
     alert(`Resultados:\n\n${resumo}`);
 });
 
-// Processar cada imagem individualmente
+// Criar ou obter uma categoria
+function obterCategoria(nome) {
+    let categoria = document.getElementById(`categoria-${nome}`);
+    
+    if (!categoria) {
+        categoria = document.createElement('div');
+        categoria.id = `categoria-${nome}`;
+        categoria.classList.add('categoria');
+
+        const titulo = document.createElement('h2');
+        titulo.innerText = nome;
+        categoria.appendChild(titulo);
+
+        caixaDeImagens.appendChild(categoria);
+    }
+
+    return categoria;
+}
+
+// Processar imagem e classificar
 async function processarImagem(imagePath) {
     return new Promise(resolve => {
         const img = document.createElement('img');
         img.src = imagePath;
         img.classList.add('miniatura');
-    
-
-        caixaDeImagens.appendChild(img);
-
+       
         img.onload = async () => {
             if (!blazefaceModel || !mobilenetModel) {
                 console.log('Modelos ainda não carregados!');
                 alert('Modelos ainda não carregados. Tente novamente.');
-                hideLoading();
                 return resolve(null);
             }
 
@@ -93,13 +107,27 @@ async function processarImagem(imagePath) {
                 const facePredictions = await blazefaceModel.estimateFaces(img, false);
                 const mobilenetPredictions = await mobilenetModel.classify(img);
 
-                const classificacoes = mobilenetPredictions
-                    .map(p => `${p.className} (${(p.probability * 100).toFixed(2)}%)`)
-                    .join('\n');
+                let categoriaNome = mobilenetPredictions[0].className; // Melhor classificação
+
+                // Se houver rostos na imagem, categorizar como "Pessoa"
+                if (facePredictions.length > 0) {
+                    categoriaNome = "Pessoa";
+                } else {
+                    // Se não houver rostos, mas a classificação contiver palavras associadas a humanos, categorizamos como "Pessoa"
+                    for (const pred of mobilenetPredictions) {
+                        if (CATEGORIAS_HUMANAS.some(human => pred.className.toLowerCase().includes(human))) {
+                            categoriaNome = "Pessoa";
+                            break;
+                        }
+                    }
+                }
+
+                const categoria = obterCategoria(categoriaNome);
+                categoria.appendChild(img);
 
                 resolve({ 
                     faces: facePredictions.length, 
-                    classes: classificacoes 
+                    classes: categoriaNome 
                 });
 
             } catch (error) {
