@@ -5,14 +5,15 @@ let win;
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1200,
+        height: 800,
         webPreferences: {
-            nodeIntegration: true, 
-            contextIsolation: false, 
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true
         }
     });
-
+    
     win.loadFile('index.html');
 }
 
