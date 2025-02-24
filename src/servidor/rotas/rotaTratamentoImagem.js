@@ -27,7 +27,7 @@ rota.post('/upload', upload.array('images'), (req, res) => {
 
     // Processa cada imagem
     files.forEach((file, index) => {
-        const categoria = categories[index]; 
+        let categoria = categories[index].replace(/["']/g, ""); // Remove aspas desnecessárias
         const dir = path.join(__dirname, 'uploads', categoria);
 
         // Cria a pasta da categoria se não existir
@@ -39,6 +39,7 @@ rota.post('/upload', upload.array('images'), (req, res) => {
         const filePath = path.join(dir, file.originalname);
         fs.writeFileSync(filePath, file.buffer);
     });
+
 
     res.status(200).send({ message: 'Imagens organizadas com sucesso!' });
 });

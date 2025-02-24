@@ -5,7 +5,7 @@ const blazeface = require('@tensorflow-models/blazeface');
 
 const backendUrl = process.env.BACKEND_URL ||  "http://localhost:3000"; 
 
-console.log(backendUrl);
+
 
 
 const inputFile = document.getElementById('fileInput');
@@ -59,6 +59,8 @@ async function enviarParaBackend(resultados) {
 
     // Envia para o backend
     try {
+        console.log(formData.get('images'));
+        
         const response = await fetch(`${backendUrl}/upload`, {
             method: 'POST',
             body: formData,
