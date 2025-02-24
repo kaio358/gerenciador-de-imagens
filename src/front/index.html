@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/principal.css">
+    <title>Organizador de Imagens</title>
+</head>
+<body>
+    <h1>Organizador de Imagens</h1>
+    <input type="file" id="fileInput" multiple accept="image/*"/> 
+
+    <div id="loading">
+        Carregando...
+    </div>
+    
+    <div id="caixa_imagens"></div>
+   
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+    <script src="./js/renderer.js"></script>
+</body>
+</html>
