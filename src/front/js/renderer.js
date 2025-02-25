@@ -6,8 +6,6 @@ const blazeface = require('@tensorflow-models/blazeface');
 const backendUrl = process.env.BACKEND_URL ||  "http://localhost:3000"; 
 
 
-
-
 const inputFile = document.getElementById('fileInput');
 const caixaDeImagens = document.getElementById('caixa_imagens');
 const loadingScreen = document.getElementById('loading');
@@ -53,13 +51,12 @@ async function enviarParaBackend(resultados) {
     // Adiciona cada imagem e sua categoria ao FormData
     resultados.forEach((resultado, index) => {
         const file = inputFile.files[index];
-        formData.append('images', file); // Adiciona a imagem
-        formData.append('categories', JSON.stringify(resultado.classes));// Adiciona a categoria
+        formData.append('images', file); 
+        formData.append('categories', JSON.stringify(resultado.classes));
     });
 
     // Envia para o backend
     try {
-        console.log(formData.get('images'));
         
         const response = await fetch(`${backendUrl}/upload`, {
             method: 'POST',
@@ -108,11 +105,11 @@ inputFile.addEventListener('change', async (e) => {
 
 // Criar ou obter uma categoria
 function obterCategoria(nome) {
-    let categoria = document.getElementById(`categoria-${nome}`);
+    let categoria = document.getElementById(`categoria_${nome}`);
     
     if (!categoria) {
         categoria = document.createElement('div');
-        categoria.id = `categoria-${nome}`;
+        categoria.id = `categoria_${nome}`;
         categoria.classList.add('categoria');
 
         const titulo = document.createElement('h2');

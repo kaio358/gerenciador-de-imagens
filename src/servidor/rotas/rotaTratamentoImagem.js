@@ -8,8 +8,10 @@ const upload = multer({ storage: multer.memoryStorage() })
 
 
 
+
 function criarDiretorio() {
-    const uploadsDir = path.join(__dirname, 'uploads');
+
+    const uploadsDir = path.join(__dirname,'..','..','uploads');
     if (!fs.existsSync(uploadsDir)){
         fs.mkdirSync(uploadsDir);
     }
@@ -28,8 +30,8 @@ rota.post('/upload', upload.array('images'), (req, res) => {
     // Processa cada imagem
     files.forEach((file, index) => {
         let categoria = categories[index].replace(/["']/g, ""); // Remove aspas desnecessárias
-        const dir = path.join(__dirname, 'uploads', categoria);
-
+        const dir = path.join(__dirname,'..','..' ,'uploads', categoria);
+        
         // Cria a pasta da categoria se não existir
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
