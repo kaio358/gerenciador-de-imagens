@@ -8,7 +8,13 @@
 </head>
 <body>
     <h1>Organizador de Imagens</h1>
-    <input type="file" id="fileInput" multiple accept="image/*"/> 
+    
+   
+    <div id="dropArea">
+        <p>Arraste suas imagens aqui ou clique para selecionar</p>
+    </div>
+
+    <input type="file" id="fileInput" multiple accept="image/*" hidden/> 
 
     <div id="loading">
         Carregando...
@@ -16,7 +22,9 @@
     
     <div id="caixa_imagens"></div>
    
-    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+
     <script src="./js/renderer.js"></script>
+    <script src="./js/dragAndDrop.js"></script> 
 </body>
+
 </html>

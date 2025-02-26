@@ -1,11 +1,37 @@
+/* local de arrastar imagens  */
+#dropArea {
+    width: 90%;
+    max-width: 500px;
+    height: 150px;
+    margin: 20px auto;
+    border: 2px dashed #007bff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #007bff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#dropArea.highlight {
+    background-color: #e0f7ff;
+    border-color: #0056b3;
+}
+
 /* Container que limita a área de exibição das imagens */
+
 #caixa_imagens {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin: auto;
     justify-content: center;
     align-items: center;
     max-width: 90vw;
+    min-height: 50vh;
     max-height: 80vh;
     overflow-y: auto; 
     padding: 10px;
