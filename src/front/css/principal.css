@@ -1,4 +1,56 @@
-/* local de arrastar imagens  */
+/* Estilos gerais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo do menu */
+.navbar {
+    background-color: #007bff;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 10px 0;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar ul li {
+    margin: 0 20px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    background-color: #0056b3;
+    border-radius: 5px;
+}
+
+/* Estilo do header */
+header {
+    background-color: #4CAF50;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    margin-top: 60px; /* Adicionando margem para o menu fixo */
+}
+
+/* Estilo da área de arraste */
 #dropArea {
     width: 90%;
     max-width: 500px;
@@ -22,7 +74,6 @@
 }
 
 /* Container que limita a área de exibição das imagens */
-
 #caixa_imagens {
     display: flex;
     flex-wrap: wrap;
@@ -41,7 +92,7 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-
+/* Estilo das categorias de imagens */
 .categoria {
     border: 2px solid #ddd;
     padding: 15px;
@@ -56,6 +107,7 @@
     margin-bottom: 10px;
 }
 
+/* Estilo das semelhanças (imagens relacionadas ou agrupadas) */
 .semelhancas {
     border: 2px dashed #aaa;
     padding: 10px;
@@ -67,25 +119,57 @@
 .miniatura {
     display: block;
     margin: 10px auto;
-
     width: 300px;
     height: 300px;
-    object-fit: cover; 
+    object-fit: cover;
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
 }
 
+.miniatura:hover {
+    transform: scale(1.05);
+}
 
-
-#loading{
-    display:none;
-    position: fixed; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    background: rgba(0, 0, 0, 0.8); 
-    color: white; 
-    padding: 20px; 
-    border-radius: 10px; 
+/* Estilo de carregamento */
+#loading {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
     font-size: 18px;
+}
+
+#loading .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4CAF50;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+/* Animação de carregamento (spinner) */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estilo para as seções do site */
+section {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Estilo do rodapé */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
 }
