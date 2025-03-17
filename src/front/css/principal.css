@@ -1,175 +1,71 @@
-/* Estilos gerais */
+/* Estilos Gerais */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-/* Estilo do menu */
+/* Navbar */
 .navbar {
-    background-color: #007bff;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0056b3;
+    padding: 15px 20px;
+    color: white;
+    border-radius: 10px;
+}
+
+.navbar .logo a {
+    color: white;
+    font-size: 1.5em;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 .navbar ul {
     list-style: none;
+    display: flex;
+    gap: 20px;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-}
-
-.navbar ul li {
-    margin: 0 20px;
 }
 
 .navbar ul li a {
     color: white;
     text-decoration: none;
-    font-size: 18px;
-    padding: 10px 15px;
-    transition: background-color 0.3s ease;
+    font-size: 1em;
 }
 
-.navbar ul li a:hover {
-    background-color: #0056b3;
-    border-radius: 5px;
-}
-
-/* Estilo do header */
+/* Cabeçalho */
 header {
-    background-color: #4CAF50;
-    padding: 20px;
+    background-color: #388e3c;
     text-align: center;
+    padding: 40px;
     color: white;
-    margin-top: 60px; /* Adicionando margem para o menu fixo */
-}
-
-/* Estilo da área de arraste */
-#dropArea {
-    width: 90%;
-    max-width: 500px;
-    height: 150px;
-    margin: 20px auto;
-    border: 2px dashed #007bff;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #007bff;
-    font-size: 18px;
-    cursor: pointer;
-    transition: 0.3s;
+    margin: 20px;
 }
 
-#dropArea.highlight {
-    background-color: #e0f7ff;
-    border-color: #0056b3;
+header h1 {
+    font-size: 2.5em;
+    margin: 0;
 }
 
-/* Container que limita a área de exibição das imagens */
-#caixa_imagens {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: auto;
-    justify-content: center;
-    align-items: center;
-    max-width: 90vw;
-    min-height: 50vh;
-    max-height: 80vh;
-    overflow-y: auto; 
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background-color: #f8f8f8;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-}
 
-/* Estilo das categorias de imagens */
-.categoria {
-    border: 2px solid #ddd;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #f8f8f8;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    min-width: 250px;
-}
-
-.categoria h2 {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-/* Estilo das semelhanças (imagens relacionadas ou agrupadas) */
-.semelhancas {
-    border: 2px dashed #aaa;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: #e0e0e0;
-}
-
-/* Padroniza o tamanho das imagens */
-.miniatura {
-    display: block;
-    margin: 10px auto;
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
-}
-
-.miniatura:hover {
-    transform: scale(1.05);
-}
-
-/* Estilo de carregamento */
-#loading {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    font-size: 18px;
-}
-
-#loading .spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #4CAF50;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-}
-
-/* Animação de carregamento (spinner) */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Estilo para as seções do site */
-section {
-    padding: 20px;
-    margin-top: 20px;
-}
-
-/* Estilo do rodapé */
+/* Rodapé */
 footer {
+    text-align: center;
     background-color: #333;
     color: white;
-    padding: 20px 0;
-    text-align: center;
+    padding: 15px;
+    margin-top: auto;
+    width: 100%;
+    border-radius: 10px 10px 0 0;
 }
+

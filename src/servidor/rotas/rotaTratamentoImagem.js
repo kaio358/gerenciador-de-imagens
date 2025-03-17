@@ -9,11 +9,11 @@ const upload = multer({ storage: multer.memoryStorage() })
 
 
 
-function criarDiretorio() {
+function criarDiretorio(uploadsDir) {
 
-    const uploadsDir = path.join(__dirname,'..','..','uploads');
+    
     if (!fs.existsSync(uploadsDir)){
-        fs.mkdirSync(uploadsDir);
+        fs.mkdirSync(uploadsDir,'uploads');
     }
 }
 
@@ -22,15 +22,18 @@ rota.post('/upload', upload.array('images'), (req, res) => {
     const files = req.files; 
     const categories = req.body.categories; 
 
+    const caminhoPasta = req.body.caminhoPasta || path.join(__dirname,'..','..','uploads');
+   
+
     if (!files || files.length === 0) {
         return res.status(400).send('Nenhuma imagem enviada.');
     }
-    criarDiretorio()
+    criarDiretorio(caminhoPasta)
 
     // Processa cada imagem
     files.forEach((file, index) => {
-        let categoria = categories[index].replace(/["']/g, ""); // Remove aspas desnecessárias
-        const dir = path.join(__dirname,'..','..' ,'uploads', categoria);
+        let categoria = categories[index].replace(/["']/g, ""); 
+        const dir = path.join(caminhoPasta,'uploads/'+categoria);
         
         // Cria a pasta da categoria se não existir
         if (!fs.existsSync(dir)) {

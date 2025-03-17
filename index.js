@@ -1,9 +1,9 @@
 const { app, BrowserWindow } = require('electron');
-const path = require('path');
+require('./src/front/js/selecionarPasta'); 
 
 let win;
 
-function createWindow() {
+app.whenReady().then(() => {
     win = new BrowserWindow({
         width: 1200,
         height: 800,
@@ -13,15 +13,8 @@ function createWindow() {
             enableRemoteModule: true
         }
     });
-    
+
     win.loadFile('./src/front/index.html');
-    win.webContents.openDevTools()
-}
-
-app.whenReady().then(createWindow);
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    win.webContents.openDevTools();
 });
+

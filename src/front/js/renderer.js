@@ -1,20 +1,21 @@
 const tf = require('@tensorflow/tfjs');
 const mobilenet = require('@tensorflow-models/mobilenet');
 const blazeface = require('@tensorflow-models/blazeface');
+const { ipcRenderer } = require('electron');
 
-
-const backendUrl = process.env.BACKEND_URL ||  "http://localhost:3000"; 
-
+const backendUrl = process.env.BACKEND_URL || "http://localhost:3000";
 
 const inputFile = document.getElementById('fileInput');
 const caixaDeImagens = document.getElementById('caixa_imagens');
 const loadingScreen = document.getElementById('loading');
+const escolherPastaBtn = document.getElementById('escolherPasta');
+const pastaSelecionadaSpan = document.getElementById('pastaSelecionada');
 
 let mobilenetModel;
 let blazefaceModel;
-const MAX_IMAGENS = 25;
+let caminhoPasta = null; // Caminho da pasta escolhida pelo usuário
 
-// Palavras-chave relacionadas a pessoas para categorização
+const MAX_IMAGENS = 25;
 const CATEGORIAS_HUMANAS = ["man", "woman", "person", "boy", "girl", "human", "people"];
 
 function showLoading(message = "Carregando modelos...") {
@@ -44,26 +45,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     await carregarModelos();
 });
 
+// Escolha da pasta pelo usuário
+escolherPastaBtn.addEventListener('click', async () => {
+    const pastaEscolhida = await ipcRenderer.invoke('escolher-pasta');
+    if (pastaEscolhida) {
+        caminhoPasta = pastaEscolhida;
+        pastaSelecionadaSpan.innerText = `Pasta selecionada: ${pastaEscolhida}`;
+    } else {
+        pastaSelecionadaSpan.innerText = "Nenhuma pasta selecionada (Usando padrão).";
+    }
+});
+
 // Função para enviar imagens e categorias para o backend
 async function enviarParaBackend(resultados) {
     const formData = new FormData();
+    formData.append('caminhoPasta', caminhoPasta || ''); // Envia o caminho escolhido ou usa padrão
 
-    // Adiciona cada imagem e sua categoria ao FormData
     resultados.forEach((resultado, index) => {
         const file = inputFile.files[index];
-        formData.append('images', file); 
+        formData.append('images', file);
         formData.append('categories', JSON.stringify(resultado.classes));
     });
 
-    // Envia para o backend
     try {
-        
         const response = await fetch(`${backendUrl}/upload`, {
             method: 'POST',
             body: formData,
         });
 
-        
         if (response.ok) {
             const data = await response.json();
             console.log('Imagens enviadas com sucesso:', data);
@@ -81,11 +90,11 @@ async function enviarParaBackend(resultados) {
 // Processamento de múltiplas imagens
 inputFile.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files).slice(0, MAX_IMAGENS);
-    
+
     if (files.length === 0) return;
 
     showLoading("Processando imagens...");
-    
+
     const promessas = files.map(file => new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = async (event) => {
@@ -106,7 +115,7 @@ inputFile.addEventListener('change', async (e) => {
 // Criar ou obter uma categoria
 function obterCategoria(nome) {
     let categoria = document.getElementById(`categoria_${nome}`);
-    
+
     if (!categoria) {
         categoria = document.createElement('div');
         categoria.id = `categoria_${nome}`;
@@ -128,7 +137,7 @@ async function processarImagem(imagePath) {
         const img = document.createElement('img');
         img.src = imagePath;
         img.classList.add('miniatura');
-       
+
         img.onload = async () => {
             if (!blazefaceModel || !mobilenetModel) {
                 console.log('Modelos ainda não carregados!');
@@ -146,7 +155,7 @@ async function processarImagem(imagePath) {
                 if (facePredictions.length > 0) {
                     categoriaNome = "Pessoa";
                 } else {
-                    // Se não houver rostos, mas a classificação contiver palavras associadas a humanos, categorizamos como "Pessoa"
+                    // Se a classificação contiver palavras associadas a humanos, categorizamos como "Pessoa"
                     for (const pred of mobilenetPredictions) {
                         if (CATEGORIAS_HUMANAS.some(human => pred.className.toLowerCase().includes(human))) {
                             categoriaNome = "Pessoa";
@@ -158,9 +167,9 @@ async function processarImagem(imagePath) {
                 const categoria = obterCategoria(categoriaNome);
                 categoria.appendChild(img);
 
-                resolve({ 
-                    faces: facePredictions.length, 
-                    classes: categoriaNome 
+                resolve({
+                    faces: facePredictions.length,
+                    classes: categoriaNome
                 });
 
             } catch (error) {
