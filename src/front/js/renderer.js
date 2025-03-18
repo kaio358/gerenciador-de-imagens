@@ -13,7 +13,7 @@ const pastaSelecionadaSpan = document.getElementById('pastaSelecionada');
 
 let mobilenetModel;
 let blazefaceModel;
-let caminhoPasta = null; // Caminho da pasta escolhida pelo usuário
+let caminhoPasta = null; 
 
 const MAX_IMAGENS = 25;
 const CATEGORIAS_HUMANAS = ["man", "woman", "person", "boy", "girl", "human", "people"];
@@ -59,7 +59,7 @@ escolherPastaBtn.addEventListener('click', async () => {
 // Função para enviar imagens e categorias para o backend
 async function enviarParaBackend(resultados) {
     const formData = new FormData();
-    formData.append('caminhoPasta', caminhoPasta || ''); // Envia o caminho escolhido ou usa padrão
+    formData.append('caminhoPasta', caminhoPasta || ''); 
 
     resultados.forEach((resultado, index) => {
         const file = inputFile.files[index];

@@ -17,14 +17,28 @@ dotenv.config();
 
 const PORTA = process.env.PORTA|| 3000
 
+// conexao 
+const conexao = require("./infraestrutura/conexao")
+const Tabelas = require("./infraestrutura/Tabelas")
+
 // importando rotas 
 const rotaTratamentoImagem = require("./rotas/rotaTratamentoImagem")
+
 
 //usando rotas
 app.use("/",rotaTratamentoImagem)
 
-server.listen(PORTA,()=>{
-    console.log("Servidor aberto na porta "+ PORTA);
-    
+
+conexao.connect((erro)=>{
+    if(erro){
+        console.log("Erro na conexão com banco de dados "+erro);
+        
+    }else{
+        Tabelas.init(conexao)
+        server.listen(PORTA,()=>{
+            console.log("Servidor aberto na porta "+ PORTA);
+            
+        })
+    }
 })
 
