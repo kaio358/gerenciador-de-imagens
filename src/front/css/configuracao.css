@@ -1,0 +1,15 @@
+
+
+#caixa_configuracoes{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+}
+/* Para seções */
+.secoes{
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc; /* Borda sutil */
+    padding: 20px;
+    background-color: #f0f0f0;
+}
