@@ -23,10 +23,12 @@ const Tabelas = require("./infraestrutura/Tabelas")
 
 // importando rotas 
 const rotaTratamentoImagem = require("./rotas/rotaTratamentoImagem")
+const rotaUsuario = require("./rotas/rotaUsuario")
 
 
 //usando rotas
 app.use("/",rotaTratamentoImagem)
+app.use("/",rotaUsuario)
 
 
 conexao.connect((erro)=>{
