@@ -1,0 +1,75 @@
+body{
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+a{
+    color: rgb(95, 95, 255);
+    text-decoration: none;
+}
+/* main  */
+
+.principal_conjunto_form{
+    display: flex;
+}
+
+/* form  */
+
+.imagem_icone{
+    height: 100px;
+}
+.caixa_form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    width: 40dvw;
+    
+    height: 100vh;
+    background-color: #fafafa;
+    /* padding: 5px; */
+}
+
+
+.caixas_entrada{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.nome_entrada{
+    font-weight: 600;
+}
+
+.inputs{
+    width: 25dvw;
+    height: 4dvh;
+    border-radius: 3px;
+}
+.btn_largura{
+    width: 25dvw;
+}
+
+
+/* aside  */
+.lateral_form {
+    background: url("../imagens/rodovia.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; 
+    height: 100dvh;
+    width: 60dvw;
+}
+.lateral_form_cadastro{
+    display: table;
+    background: url("../imagens/2305.w056.n005.218B.p15.218.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    background-position:  30% 0%;
+    padding: 100px 0;
+    
+    height: 100dvh;
+    width: 60dvw;
+}

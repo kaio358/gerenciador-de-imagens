@@ -3,7 +3,16 @@ const mobilenet = require('@tensorflow-models/mobilenet');
 const blazeface = require('@tensorflow-models/blazeface');
 const { ipcRenderer } = require('electron');
 
-const backendUrl = process.env.BACKEND_URL || "http://localhost:3000";
+
+// 1 forma backend url 
+require('dotenv').config();
+const backendUrl = process.env.BACKEND_URL ;
+
+// 2 forma backend url 
+// const fs = require('fs');
+// const config = JSON.parse(fs.readFileSync('config.json'));
+// const backendUrl =(config.backend_url);
+
 
 const inputFile = document.getElementById('fileInput');
 const caixaDeImagens = document.getElementById('caixa_imagens');
