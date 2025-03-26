@@ -3,6 +3,8 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 const http = require("http")
 const dotenv = require('dotenv');
+const path = require("path")
+
 // implementações do servidor
 const app = express()
 const server = http.createServer(app)
@@ -17,29 +19,48 @@ dotenv.config();
 
 const PORTA = process.env.PORTA|| 3000
 
+const destino = path.join(__dirname,'..')
+
 // conexao 
 const conexao = require("./infraestrutura/conexao")
 const Tabelas = require("./infraestrutura/Tabelas")
 
+
 // importando rotas 
 const rotaTratamentoImagem = require("./rotas/rotaTratamentoImagem")
-const rotaUsuario = require("./rotas/rotaUsuario")
+const rotaConfig = require("./rotas/rotaConfig")
 
 
 //usando rotas
 app.use("/",rotaTratamentoImagem)
-app.use("/",rotaUsuario)
+app.use("/",rotaConfig)
+
+// usando modelos padrões 
+
+const configuracoesModelo = require("./modelos/Configuracoes")
 
 
-conexao.connect((erro)=>{
+conexao.connect( (erro)=>{
     if(erro){
         console.log("Erro na conexão com banco de dados "+erro);
         
     }else{
-        Tabelas.init(conexao)
-        server.listen(PORTA,()=>{
+     
+        server.listen(PORTA, async()=>{
             console.log("Servidor aberto na porta "+ PORTA);
-            
+            Tabelas.init(conexao)
+
+            try {
+
+                await configuracoesModelo.criarCaminho(destino)
+                // console.log(resultado);
+                
+              
+
+            } catch (error) {
+                console.log("Deu um pequeno errinho : "+ error);
+                
+            }
         })
     }
 })

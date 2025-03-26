@@ -1,17 +1,13 @@
 const tf = require('@tensorflow/tfjs');
 const mobilenet = require('@tensorflow-models/mobilenet');
 const blazeface = require('@tensorflow-models/blazeface');
-const { ipcRenderer } = require('electron');
+
 
 
 // 1 forma backend url 
 require('dotenv').config();
 const backendUrl = process.env.BACKEND_URL ;
 
-// 2 forma backend url 
-// const fs = require('fs');
-// const config = JSON.parse(fs.readFileSync('config.json'));
-// const backendUrl =(config.backend_url);
 
 
 const inputFile = document.getElementById('fileInput');
@@ -22,7 +18,7 @@ const pastaSelecionadaSpan = document.getElementById('pastaSelecionada');
 
 let mobilenetModel;
 let blazefaceModel;
-let caminhoPasta = null; 
+
 
 const MAX_IMAGENS = 25;
 const CATEGORIAS_HUMANAS = ["man", "woman", "person", "boy", "girl", "human", "people"];
@@ -54,21 +50,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await carregarModelos();
 });
 
-// Escolha da pasta pelo usuário
-escolherPastaBtn.addEventListener('click', async () => {
-    const pastaEscolhida = await ipcRenderer.invoke('escolher-pasta');
-    if (pastaEscolhida) {
-        caminhoPasta = pastaEscolhida;
-        pastaSelecionadaSpan.innerText = `Pasta selecionada: ${pastaEscolhida}`;
-    } else {
-        pastaSelecionadaSpan.innerText = "Nenhuma pasta selecionada (Usando padrão).";
-    }
-});
+
 
 // Função para enviar imagens e categorias para o backend
 async function enviarParaBackend(resultados) {
     const formData = new FormData();
-    formData.append('caminhoPasta', caminhoPasta || ''); 
 
     resultados.forEach((resultado, index) => {
         const file = inputFile.files[index];
