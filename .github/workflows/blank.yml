@@ -1,0 +1,32 @@
+name: Syhunt SAST - Verificação de Segurança
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main  
+
+jobs:
+  syhunt_sast:
+    runs-on: windows-latest  
+
+    steps:
+    - name: Check out o código do repositório
+      uses: actions/checkout@v2  
+
+    - name: Instalar Syhunt
+      run: |
+        Invoke-WebRequest -Uri "https://syhunt.com/download/syhunt-installer.ps1" -OutFile "syhunt-installer.ps1"
+        powershell.exe -ExecutionPolicy Bypass -File syhunt-installer.ps1
+
+    - name: Rodar análise de segurança com Syhunt
+      run: |
+        syhunt -t scan --target=./ --level=medium --format=pdf  # Configura a análise (com nível médio de severidade, por exemplo)
+
+    - name: Adicionar relatório de vulnerabilidades aos artefatos
+      uses: actions/upload-artifact@v2
+      with:
+        name: relatorio-vulnerabilidades
+        path: .\relatorios\vulnerabilidades.pdf  # Caminho onde o relatório em PDF será salvo após a análise
