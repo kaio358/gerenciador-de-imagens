@@ -1,26 +1,18 @@
-name: Syhunt Security Scan
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-
 jobs:
   security_scan:
-    runs-on: windows-latest  # Alterado para Windows
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Instalar Syhunt e rodar o scan
+      - name: Iniciar o servidor local (se necessário)
         run: |
-          Invoke-WebRequest -Uri "https://www.syhunt.com/download/syhunt-hybrid.exe" -OutFile "syhunt-hybrid.exe"
-          Start-Process -FilePath ".\syhunt-hybrid.exe" -ArgumentList "/S" -NoNewWindow -Wait
-          & "C:\Program Files\Syhunt\syhuntcli.exe" -t "https://seusite.com" -o "syhunt-report.html"
+          npm install
+          npm start &  # Executa em background
+
+      - name: Rodar Syhunt Scan no localhost
+        run: |
+          docker run --rm syhunt/webappscan -t "http://localhost:3000" -o "syhunt-report.html"
 
       - name: Fazer upload do relatório
         uses: actions/upload-artifact@v4
