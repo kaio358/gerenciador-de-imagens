@@ -1,18 +1,30 @@
-name: syhunt test
+name: Syhunt Security Scan
+
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  
+
 jobs:
-  build:
-    runs-on: [self-hosted, Windows, X64]
+  security_scan:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: ScanCode.exe -target 'www.productionurl.com' -pfcond 'medium' -output https://github.com/kaio358/gerenciador-de-imagens.git
-      - name: 'Syhunt Report'
-        uses: actions/upload-artifact@v4
-        if: failure()
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Rodar Syhunt Scan
+        uses: Syhunt/WebAppScan-Action@main
         with:
-         name: syhunt-report
-         path: report.pdf
-         if-no-files-found: error
+          target: "https://seusite.com" 
+          report_format: "html"  
+          output_path: "syhunt-report.html"
+
+      - name: Fazer upload do relatório
+        uses: actions/upload-artifact@v4
+        with:
+          name: syhunt-report
+          path: syhunt-report.html
