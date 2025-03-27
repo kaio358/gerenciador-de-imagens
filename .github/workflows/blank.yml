@@ -7,22 +7,20 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:  
-  
+  workflow_dispatch:
 
 jobs:
   security_scan:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # Alterado para Windows
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Rodar Syhunt Scan
-        uses: Syhunt/WebAppScan-Action@main
-        with:
-          target: "https://seusite.com" 
-          report_format: "html"  
-          output_path: "syhunt-report.html"
+      - name: Instalar Syhunt e rodar o scan
+        run: |
+          Invoke-WebRequest -Uri "https://www.syhunt.com/download/syhunt-hybrid.exe" -OutFile "syhunt-hybrid.exe"
+          Start-Process -FilePath ".\syhunt-hybrid.exe" -ArgumentList "/S" -NoNewWindow -Wait
+          & "C:\Program Files\Syhunt\syhuntcli.exe" -t "https://seusite.com" -o "syhunt-report.html"
 
       - name: Fazer upload do relatório
         uses: actions/upload-artifact@v4
