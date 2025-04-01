@@ -40,6 +40,11 @@ app.use("/",rotaConfig)
 const configuracoesModelo = require("./modelos/Configuracoes")
 
 
+// Tentando ser o moiseis 
+// app.use(express.static(path.join(__dirname, "../teste")));
+// app.use("/models", express.static(path.join(__dirname, "models"))); 
+
+
 conexao.connect( (erro)=>{
     if(erro){
         console.log("Erro na conexão com banco de dados "+erro);
