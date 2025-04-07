@@ -1,25 +1,18 @@
-const tf = require('@tensorflow/tfjs');
-const mobilenet = require('@tensorflow-models/mobilenet');
-const blazeface = require('@tensorflow-models/blazeface');
+// carrega o back end
+const backendUrl = window.env.BACKEND_URL;
 
 
 
-// 1 forma backend url 
-require('dotenv').config();
-const backendUrl = process.env.BACKEND_URL ;
-
-
-
+// Elementos Index.html 
 const inputFile = document.getElementById('fileInput');
 const caixaDeImagens = document.getElementById('caixa_imagens');
 const loadingScreen = document.getElementById('loading');
-const escolherPastaBtn = document.getElementById('escolherPasta');
-const pastaSelecionadaSpan = document.getElementById('pastaSelecionada');
+
 
 let mobilenetModel;
 let blazefaceModel;
 
-
+// Vou mudar , isso aqui é um teste
 const MAX_IMAGENS = 25;
 const CATEGORIAS_HUMANAS = ["man", "woman", "person", "boy", "girl", "human", "people"];
 
@@ -35,6 +28,9 @@ function hideLoading() {
 async function carregarModelos() {
     showLoading("Carregando modelos de IA...");
     try {
+    
+        // mobilenetModel = await window.mlModels.loadMobileNet();
+        // blazefaceModel = await window.mlModels.loadBlazeFace();
         mobilenetModel = await mobilenet.load();
         blazefaceModel = await blazeface.load();
         console.log('Modelos carregados com sucesso!');
@@ -45,6 +41,7 @@ async function carregarModelos() {
         hideLoading();
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarModelos();
