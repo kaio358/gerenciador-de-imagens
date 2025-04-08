@@ -1,62 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizador de Imagens</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/principal.css">
-
-   
-
-
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Organizador de Imagens</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/principal.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="index.html">Organizador</a>
-        </div>
-        <ul>
-            <li><a href="index.html">Início</a></li>
-            <!-- Acho desnecessario Sobre e Contato  -->
-            <li><a href="sobre.html">Sobre</a></li>
-            <li><a href="contato.html">Contato</a></li>
+  <nav class="navbar">
+    <div class="logo"><a href="index.html">Organizador</a></div>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="sobre.html">Sobre</a></li>
+      <li><a href="contato.html">Contato</a></li>
+      <li><a href="configuracao.html">Configuração</a></li>
+    </ul>
+  </nav>
 
-            <!-- Pretendo colocar Uma engrenagem no lugar -->
-            <li><a href="configuracao.html">Configuração</a></li>
-        </ul>
-    </nav>
-    
-    <!-- verifico se o design fica melhor  -->
+  <section id="dropArea">
+    <p><i class="fas fa-upload"></i> Arraste suas imagens aqui ou clique para selecionar</p>
+    <input type="file" id="fileInput" multiple accept="image/*" hidden/>
+  </section>
 
-    <!-- <header>
-        <h1>Organizador de Imagens</h1>
-        <p>Arraste suas imagens ou clique para selecionar.</p>
-    </header> -->
-    
-    <section id="dropArea">
-        <p><i class="fas fa-upload"></i> Arraste suas imagens aqui ou clique para selecionar</p>
-        <input type="file" id="fileInput" multiple accept="image/*" hidden/>
-    </section>
-    
+  <div id="loading">Carregando...</div>
 
-    <div id="loading">
-        Carregando...
-    </div>
-    
-    <section id="caixa_imagens" class="gallery"></section>
-    
-    <footer>
-        <p>&copy; 2025 Organizador de Imagens | Todos os direitos reservados</p>
-    </footer>
+  <section id="caixa_imagens" class="gallery"></section>
 
-    <script src="./libs/tf.min.js"></script>
-    <script src="./libs/mobilenet.min.js"></script>
-    <script src="./libs/blazeface.min.js"></script>
-    
-    <script src="./js/renderer.js"></script>
-    <script src="./js/dragAndDrop.js"></script> 
+  <footer>
+    <p>&copy; 2025 Organizador de Imagens | Todos os direitos reservados</p>
+  </footer>
+
+  <!-- Bibliotecas -->
+  <script src="./libs/tf.min.js"></script>
+  <script src="./libs/mobilenet.min.js"></script>
+  <script src="./libs/face-api.min.js"></script>
+
+  <!-- Scripts -->
+  <script src="./js/renderer.js"></script>
+  <script src="./js/dragAndDrop.js"></script>
 </body>
 </html>

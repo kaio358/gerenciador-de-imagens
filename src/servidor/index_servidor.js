@@ -42,7 +42,7 @@ const configuracoesModelo = require("./modelos/Configuracoes")
 
 // Tentando ser o moiseis 
 // app.use(express.static(path.join(__dirname, "../teste")));
-// app.use("/models", express.static(path.join(__dirname, "models"))); 
+app.use("/models", express.static(path.join(__dirname, "models"))); 
 
 
 conexao.connect( (erro)=>{

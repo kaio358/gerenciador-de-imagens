@@ -1,18 +1,15 @@
-// carrega o back end
-const backendUrl = window.env.BACKEND_URL;
+// Carrega a URL do backend a partir do preload.js
+const backendUrl = window.env?.BACKEND_URL ;
 
 
-
-// Elementos Index.html 
+// Elementos do index.html
 const inputFile = document.getElementById('fileInput');
 const caixaDeImagens = document.getElementById('caixa_imagens');
 const loadingScreen = document.getElementById('loading');
 
-
 let mobilenetModel;
 let blazefaceModel;
 
-// Vou mudar , isso aqui é um teste
 const MAX_IMAGENS = 25;
 const CATEGORIAS_HUMANAS = ["man", "woman", "person", "boy", "girl", "human", "people"];
 
@@ -28,11 +25,12 @@ function hideLoading() {
 async function carregarModelos() {
     showLoading("Carregando modelos de IA...");
     try {
-    
-        // mobilenetModel = await window.mlModels.loadMobileNet();
-        // blazefaceModel = await window.mlModels.loadBlazeFace();
         mobilenetModel = await mobilenet.load();
-        blazefaceModel = await blazeface.load();
+
+        await faceapi.nets.ssdMobilenetv1.loadFromUri(`${backendUrl}/models`);
+        await faceapi.nets.faceLandmark68Net.loadFromUri(`${backendUrl}/models`);
+        await faceapi.nets.faceRecognitionNet.loadFromUri(`${backendUrl}/models`);
+
         console.log('Modelos carregados com sucesso!');
     } catch (error) {
         console.error('Erro ao carregar modelos:', error);
@@ -42,14 +40,10 @@ async function carregarModelos() {
     }
 }
 
-
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarModelos();
 });
 
-
-
-// Função para enviar imagens e categorias para o backend
 async function enviarParaBackend(resultados) {
     const formData = new FormData();
 
@@ -79,7 +73,6 @@ async function enviarParaBackend(resultados) {
     }
 }
 
-// Processamento de múltiplas imagens
 inputFile.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files).slice(0, MAX_IMAGENS);
 
@@ -100,11 +93,9 @@ inputFile.addEventListener('change', async (e) => {
     const resultados = await Promise.all(promessas);
     hideLoading();
 
-    // Envia os resultados para o backend
     await enviarParaBackend(resultados);
 });
 
-// Criar ou obter uma categoria
 function obterCategoria(nome) {
     let categoria = document.getElementById(`categoria_${nome}`);
 
@@ -123,7 +114,6 @@ function obterCategoria(nome) {
     return categoria;
 }
 
-// Processar imagem e classificar
 async function processarImagem(imagePath) {
     return new Promise(resolve => {
         const img = document.createElement('img');
@@ -131,38 +121,37 @@ async function processarImagem(imagePath) {
         img.classList.add('miniatura');
 
         img.onload = async () => {
-            if (!blazefaceModel || !mobilenetModel) {
+            if (!mobilenetModel) {
                 console.log('Modelos ainda não carregados!');
                 alert('Modelos ainda não carregados. Tente novamente.');
                 return resolve(null);
             }
 
             try {
-                const facePredictions = await blazefaceModel.estimateFaces(img, false);
+                const facePredictions = await faceapi.detectAllFaces(img);
+                console.log("oi ?",facePredictions);   
                 const mobilenetPredictions = await mobilenetModel.classify(img);
+           
+                let categoriaNome = mobilenetPredictions[0].className;
 
-                let categoriaNome = mobilenetPredictions[0].className; // Melhor classificação
+                // if (facePredictions.length > 0) {
+                //     categoriaNome = "Pessoa";
+                // } else {
+                //     for (const pred of mobilenetPredictions) {
+                //         if (CATEGORIAS_HUMANAS.some(human => pred.className.toLowerCase().includes(human))) {
+                //             categoriaNome = "Pessoa";
+                //             break;
+                //         }
+                //     }
+                // }
 
-                // Se houver rostos na imagem, categorizar como "Pessoa"
-                if (facePredictions.length > 0) {
-                    categoriaNome = "Pessoa";
-                } else {
-                    // Se a classificação contiver palavras associadas a humanos, categorizamos como "Pessoa"
-                    for (const pred of mobilenetPredictions) {
-                        if (CATEGORIAS_HUMANAS.some(human => pred.className.toLowerCase().includes(human))) {
-                            categoriaNome = "Pessoa";
-                            break;
-                        }
-                    }
-                }
+                // const categoria = obterCategoria(categoriaNome);
+                // categoria.appendChild(img);
 
-                const categoria = obterCategoria(categoriaNome);
-                categoria.appendChild(img);
-
-                resolve({
-                    faces: facePredictions.length,
-                    classes: categoriaNome
-                });
+                // resolve({
+                //     faces: facePredictions.length,
+                //     classes: categoriaNome
+                // });
 
             } catch (error) {
                 console.error('Erro ao processar a imagem:', error);

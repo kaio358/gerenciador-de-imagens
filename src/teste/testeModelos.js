@@ -1,4 +1,4 @@
-// const faceapi = require("face-api.js");
+
 
 async function loadModels() {
     console.log("Carregando modelos...");
