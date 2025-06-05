@@ -34,7 +34,8 @@ Para inicializar damos preferencia a começar pelo servidor (back end) e logo em
    ``` cd src/servidor ```
 3. Execute o arquivo index_servidor.js
 ``` node index_servidor```
-4. No outro terminal execute o electron.
+4. No outro terminal entre em src e execute o electron.
+```cd src ``
 ``` npx electron . ```
 ## Lista de afazeres 
 

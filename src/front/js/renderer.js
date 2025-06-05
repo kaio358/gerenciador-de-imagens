@@ -1,6 +1,4 @@
-// Carrega a URL do backend a partir do preload.js
-const backendUrl = window.env?.BACKEND_URL ;
-
+const backendUrl = window.env?.BACKEND_URL;
 
 // Elementos do index.html
 const inputFile = document.getElementById('fileInput');
@@ -8,7 +6,6 @@ const caixaDeImagens = document.getElementById('caixa_imagens');
 const loadingScreen = document.getElementById('loading');
 
 let mobilenetModel;
-let blazefaceModel;
 
 const MAX_IMAGENS = 25;
 const CATEGORIAS_HUMANAS = ["man", "woman", "person", "boy", "girl", "human", "people"];
@@ -26,15 +23,10 @@ async function carregarModelos() {
     showLoading("Carregando modelos de IA...");
     try {
         mobilenetModel = await mobilenet.load();
-
-        await faceapi.nets.ssdMobilenetv1.loadFromUri(`${backendUrl}/models`);
-        await faceapi.nets.faceLandmark68Net.loadFromUri(`${backendUrl}/models`);
-        await faceapi.nets.faceRecognitionNet.loadFromUri(`${backendUrl}/models`);
-
-        console.log('Modelos carregados com sucesso!');
+        console.log('Modelo MobileNet carregado com sucesso!');
     } catch (error) {
-        console.error('Erro ao carregar modelos:', error);
-        alert('Erro ao carregar modelos. Verifique o console para mais detalhes.');
+        console.error('Erro ao carregar MobileNet:', error);
+        alert('Erro ao carregar o modelo. Verifique o console.');
     } finally {
         hideLoading();
     }
@@ -122,36 +114,29 @@ async function processarImagem(imagePath) {
 
         img.onload = async () => {
             if (!mobilenetModel) {
-                console.log('Modelos ainda não carregados!');
-                alert('Modelos ainda não carregados. Tente novamente.');
+                console.log('Modelo ainda não carregado!');
+                alert('Modelo ainda não carregado. Tente novamente.');
                 return resolve(null);
             }
 
             try {
-                const facePredictions = await faceapi.detectAllFaces(img);
-                console.log("oi ?",facePredictions);   
                 const mobilenetPredictions = await mobilenetModel.classify(img);
-           
                 let categoriaNome = mobilenetPredictions[0].className;
 
-                // if (facePredictions.length > 0) {
-                //     categoriaNome = "Pessoa";
-                // } else {
-                //     for (const pred of mobilenetPredictions) {
-                //         if (CATEGORIAS_HUMANAS.some(human => pred.className.toLowerCase().includes(human))) {
-                //             categoriaNome = "Pessoa";
-                //             break;
-                //         }
-                //     }
-                // }
+                for (const pred of mobilenetPredictions) {
+                    if (CATEGORIAS_HUMANAS.some(human =>
+                        pred.className.toLowerCase().includes(human))) {
+                        categoriaNome = "Pessoa";
+                        break;
+                    }
+                }
 
-                // const categoria = obterCategoria(categoriaNome);
-                // categoria.appendChild(img);
+                const categoria = obterCategoria(categoriaNome);
+                categoria.appendChild(img);
 
-                // resolve({
-                //     faces: facePredictions.length,
-                //     classes: categoriaNome
-                // });
+                resolve({
+                    classes: categoriaNome
+                });
 
             } catch (error) {
                 console.error('Erro ao processar a imagem:', error);
