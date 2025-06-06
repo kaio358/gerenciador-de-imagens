@@ -1,0 +1,35 @@
+
+
+.contact-form{
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.form{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.form input{
+    height: 25px;
+}
+
+.form input[type="textarea"]{
+    height: 100px;
+}
+
+.form button{
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
