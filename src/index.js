@@ -24,7 +24,7 @@ app.whenReady().then(() => {
 
     // win.loadFile('./teste/index_teste.html');
     win.loadFile('./front/index.html')
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 });
 
 

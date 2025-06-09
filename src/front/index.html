@@ -8,6 +8,11 @@
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/principal.css">
 </head>
+
+<div id="grafico-tooltip" style="display:none;">
+  <canvas id="graficoCanvas" width="200" height="150"></canvas>
+</div>
+
 <body>
   <nav class="navbar">
     <div class="logo"><a href="index.html">Organizador</a></div>
@@ -27,6 +32,7 @@
   <div id="loading">Carregando...</div>
 
   <section id="caixa_imagens" class="gallery"></section>
+  
 
   <footer>
     <p>&copy; 2025 Organizador de Imagens | Todos os direitos reservados</p>
@@ -36,6 +42,8 @@
   <script src="./libs/tf.min.js"></script>
   <script src="./libs/mobilenet.min.js"></script>
   <script src="./libs/face-api.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
   <!-- Scripts -->
   <script src="./js/renderer.js"></script>
