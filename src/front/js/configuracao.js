@@ -1,12 +1,10 @@
-const { ipcRenderer } = require('electron');
-
+const ipcRenderer = window.electronAPI.ipcRenderer;
 
 const escolherPastaBtn = document.getElementById('escolherPasta');
 
 const pastaSelecionadaSpan = document.getElementById('pastaSelecionada');
 
-require('dotenv').config();
-const backendUrl = process.env.BACKEND_URL ;
+const backendUrl = window.env.BACKEND_URL;
 
 let caminhoPasta = null; 
 
@@ -22,7 +20,7 @@ document.addEventListener("DOMContentLoaded",async ()=>{
 
 // Escolha da pasta pelo usuário
 escolherPastaBtn.addEventListener('click', async () => {
-    const pastaEscolhida = await ipcRenderer.invoke('escolher-pasta');
+     const pastaEscolhida = await ipcRenderer.invoke('escolher-pasta');
     if (pastaEscolhida) {
 
         caminhoPasta = pastaEscolhida;
